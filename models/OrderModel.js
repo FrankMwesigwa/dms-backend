@@ -5,32 +5,30 @@ const { ObjectId } = mongoose.Schema;
 
 const orderSchema = new schema(
   {
-    orderDate: {
-      type: Date,
-    },
-    approvalDate: {
-      type: Date,
-    },
-    status: {
+    products: [
+      {
+        product: {
+          type: ObjectId,
+          ref: "Product",
+        },
+        count: Number,
+        name: String,
+        amount: Number,
+      },
+    ],
+    orderStatus: {
       type: String,
+      default: "Not Processed",
+      enum: [
+        "Not Processed",
+        "processing",
+        "Dispatched",
+        "Cancelled",
+        "Completed",
+      ],
     },
-    quantity: {
-      type: Number,
-    },
-    amount: {
-      type: Number,
-    },
-    product: {
-      type: ObjectId,
-      ref: "Product",
-    },
-    distributor: {
-      type: ObjectId,
-      ref: "Distributor",
-    },
-    createdBy: {
-      type: String,
-    },
+    orderTotal: Number,
+    orderdBy: { type: ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

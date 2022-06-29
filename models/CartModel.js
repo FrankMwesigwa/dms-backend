@@ -12,11 +12,12 @@ const cartSchema = new schema(
           ref: "Product",
         },
         count: Number,
-        price: Number,
+        amount: Number,
+        name: String,
       },
     ],
     cartTotal: Number,
-    // orderdBy: { type: ObjectId, ref: "User" },
+    orderdBy: { type: ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

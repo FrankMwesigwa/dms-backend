@@ -6,23 +6,21 @@ import User from "../models/UserModel.js";
 
 const router = express.Router();
 
-router.post("/register", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    const { email } = req.body;
+    const { username } = req.body;
 
-    const userEmail = await User.findOne({ email });
-    if (userEmail)
-      return res.json({ message: " User with that email already exists " });
-    else if (!userEmail) {
+    const userName = await User.findOne({ username });
+    if (userName)
+      return res.json({ message: " User with that username already exists " });
+    else if (!userName) {
       req.body.password = await Bcrypt.hashSync(req.body.password, 10);
 
       const user = new User({
+        username: req.body.username,
         email: req.body.email,
         password: req.body.password,
         role: req.body.role,
-        fname: req.body.fname,
-        lname: req.body.lname,
-        phone: req.body.phone
       });
 
       const savedUser = await user.save();
@@ -35,9 +33,11 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    var user = await User.findOne({ email: req.body.email }).exec();
+    const user = await User.findOne({ username: req.body.username });
     if (!user) {
-      return res.status(400).send({ message: "The email is not registered" });
+      return res
+        .status(400)
+        .send({ message: "The username is not registered" });
     }
     if (!Bcrypt.compareSync(req.body.password, user.password)) {
       return res.status(400).send({ message: "Invalid password " });
@@ -45,8 +45,10 @@ router.post("/login", async (req, res) => {
 
     const accessToken = jwt.sign(
       { id: user._id, role: user.role },
-      "process.env.secretToken"
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
     );
+
     res.json({
       accessToken: accessToken,
       user: user,

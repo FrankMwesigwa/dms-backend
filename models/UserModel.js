@@ -4,6 +4,10 @@ const schema = mongoose.Schema;
 
 const userSchema = new schema(
   {
+    username: {
+      type: String,
+      required: true,
+    },
     email: {
       type: String,
       required: true,
@@ -14,16 +18,6 @@ const userSchema = new schema(
     },
     role: {
       type: String,
-      required: true,
-    },
-    fname: {
-      type: String,
-    },
-    lname: {
-      type: String,
-    },
-    phone: {
-      type: Number,
     },
   },
   { timestamps: true }
