@@ -15,7 +15,6 @@ router.post("/", auth, async (req, res) => {
 
   if (cartExistByThisUser) {
     cartExistByThisUser.remove();
-    console.log("removed old cart");
   }
 
   for (let i = 0; i < cart.length; i++) {
@@ -45,7 +44,6 @@ router.post("/", auth, async (req, res) => {
       orderdBy: user.id,
     }).save();
 
-    console.log("new cart ----> ", newCart);
     res.json({ ok: true });
   } catch (error) {
     res.json(error.message);

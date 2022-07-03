@@ -24,6 +24,10 @@ const distributorSchema = new schema(
     createdBy: {
       type: String,
     },
+    user: {
+      type: ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );

@@ -1,32 +1,13 @@
 import express from "express";
+import auth from "../middleware/auth.js";
+import User from "../models/UserModel.js";
 import Agent from "../models/AgentModel.js";
 
 const router = express.Router();
 
-router.post("/", async (req, res) => {
-  let agent = new Agent({
-    name: req.body.name,
-    region: req.body.region,
-    address: req.body.address,
-    location: req.body.location,
-    contact: req.body.contact,
-    distributor: req.body.distributor,
-    createdBy: req.body.createdBy,
-  });
-  try {
-    let agentnew = await agent.save();
-    res.status(201).json({
-      message: "Agent has been created successfully",
-      agentnew,
-    });
-  } catch (error) {
-    res.json(error.message);
-  }
-});
-
 router.get("/", async (req, res) => {
   try {
-    let agents = await Agent.find().populate("distributor")
+    let agents = await Agent.find().populate("user").populate("distributor");
 
     if (!agents) {
       res.json({
@@ -34,6 +15,19 @@ router.get("/", async (req, res) => {
       });
     }
     res.status(200).json(agents);
+  } catch (error) {
+    res.json(error.message);
+  }
+});
+
+router.get("/dist/products", auth, async (req, res) => {
+  let user = await User.findOne({ _id: req.user.id });
+
+  try {
+    let agent = await Agent.findOne({ user: user.id })
+      .populate("distributor");
+    console.log("agent=====>", agent);
+    res.status(200).json({dist: agent.distributor.user});
   } catch (error) {
     res.json(error.message);
   }

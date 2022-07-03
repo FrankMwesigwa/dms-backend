@@ -8,10 +8,9 @@ import Product from "../models/ProductModel.js";
 const router = express.Router();
 
 router.post("/", auth, async (req, res) => {
+  console.log("Order endpoint In =====>")
   const user = await User.findOne({ _id: req.user.id }).exec();
   let { products } = await Cart.findOne({ orderdBy: user.id }).exec();
-
-  console.log("Products ====>", products);
 
   let orderTotal = 0;
   for (let i = 0; i < products.length; i++) {
@@ -44,6 +43,7 @@ router.post("/", auth, async (req, res) => {
     let updated = await Product.bulkWrite(bulkOption, {});
   } catch (error) {
     res.json(error.message);
+    console.log("Order error =====>", error)
   }
 });
 
@@ -72,7 +72,6 @@ router.get("/:id", auth, async (req, res) => {
 
 router.get("/history", auth, async (req, res) => {
   let user = await User.findOne({ _id: req.user.id });
-  console.log("User ====>", user);
   try {
     let userOrders = await Order.findOne({ orderdBy: user.id }).populate("product");
     res.status(200).json(userOrders);

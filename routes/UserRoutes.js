@@ -3,6 +3,9 @@ import Bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import User from "../models/UserModel.js";
+import Agent from "../models/AgentModel.js";
+import Admin from "../models/AdminModel.js";
+import Distributor from "../models/DistributorModel.js";
 
 const router = express.Router();
 
@@ -12,10 +15,9 @@ router.post("/", async (req, res) => {
 
     const userName = await User.findOne({ username });
     if (userName)
-      return res.json({ message: " User with that username already exists " });
+      return res.json({ message: " User with that email already exists " });
     else if (!userName) {
       req.body.password = await Bcrypt.hashSync(req.body.password, 10);
-
       const user = new User({
         username: req.body.username,
         email: req.body.email,
@@ -24,7 +26,51 @@ router.post("/", async (req, res) => {
       });
 
       const savedUser = await user.save();
-      res.json(savedUser);
+      console.log(savedUser);
+
+      const role = savedUser.role.toLowerCase();
+      if (role === "distributor") {
+        const distributor = new Distributor({
+          user: savedUser._id,
+          name: req.body.name,
+          region: req.body.region,
+          address: req.body.address,
+          location: req.body.location,
+          contact: req.body.contact,
+          createdBy: req.body.createdBy,
+        });
+        await distributor.save();
+        console.log(" Distributor Saved Successfully");
+        console.log("saved distributor====>", distributor);
+      } else if (role === "agent") {
+        const agent = new Agent({
+          user: savedUser._id,
+          name: req.body.name,
+          region: req.body.region,
+          address: req.body.address,
+          location: req.body.location,
+          contact: req.body.contact,
+          distributor: req.body.distributor,
+          createdBy: req.body.createdBy,
+        });
+        await agent.save();
+        console.log(" Agent Saved Successfully");
+        console.log("saved Agent ====>", agent);
+      } else if (role === "admin") {
+        const admin = new Admin({
+          user: savedUser._id,
+          fname: req.body.fname,
+          lname: req.body.lname,
+          sex: req.body.sex,
+          phone: req.body.phone,
+        });
+        await admin.save();
+        console.log(" admin Saved Successfully");
+      }
+
+      res.json({
+        message: `${savedUser.username} saved succesfully`,
+      });
     }
   } catch (error) {
     res.json(error);
@@ -45,8 +91,8 @@ router.post("/login", async (req, res) => {
 
     const accessToken = jwt.sign(
       { id: user._id, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      process.env.JWT_SECRET
+      // { expiresIn: "1d" }
     );
 
     res.json({

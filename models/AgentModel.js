@@ -25,6 +25,10 @@ const agentSchema = new schema(
       type: ObjectId,
       ref: "Distributor",
     },
+    user: {
+      type: ObjectId,
+      ref: "User",
+    },
     createdBy: {
       type: String,
     },
