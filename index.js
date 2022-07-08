@@ -10,6 +10,8 @@ import userRoutes from './routes/UserRoutes.js'
 import cartRoutes from './routes/CartRoutes.js'
 import agentRoutes from './routes/AgentRoutes.js'
 import orderRoutes from './routes/OrderRoutes.js'
+import agentCart from './routes/AgentCartRoutes.js'
+import agentOrders from './routes/AgentOrderRoutes.js'
 import uploadRoutes from './routes/UploadRoutes.js'
 import productRoutes from './routes/ProductRoutes.js'
 import distributorRoutes from './routes/DistributorRoutes.js'
@@ -27,6 +29,8 @@ app.use("/api/agents", agentRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use('/api/products', productRoutes);
+app.use("/api/agent/cart", agentCart);
+app.use("/api/agent/order", agentOrders);
 app.use("/api/distributors", distributorRoutes);
 
 app.listen(PORT, () => {
