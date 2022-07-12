@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const schema = mongoose.Schema;
 const { ObjectId } = mongoose.Schema;
 
-const cartSchema = new schema(
+const distCartSchema = new schema(
   {
     products: [
       {
@@ -22,6 +22,6 @@ const cartSchema = new schema(
   { timestamps: true }
 );
 
-const Cart = mongoose.model("Cart", cartSchema);
+const DistCart = mongoose.model("DistCart", distCartSchema);
 
-export default Cart;
+export default DistCart;

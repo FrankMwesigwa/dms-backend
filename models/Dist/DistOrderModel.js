@@ -33,6 +33,6 @@ const orderSchema = new schema(
   { timestamps: true }
 );
 
-const Order = mongoose.model("Order", orderSchema);
+const DistOrder = mongoose.model("DistOrder", orderSchema);
 
-export default Order;
+export default DistOrder;

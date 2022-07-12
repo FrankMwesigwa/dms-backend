@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const schema = mongoose.Schema;
 const { ObjectId } = mongoose.Schema;
 
-const distributorSchema = new schema(
+const distSchema = new schema(
   {
     name: {
       type: String,
@@ -21,9 +21,6 @@ const distributorSchema = new schema(
     contact: {
       type: String,
     },
-    createdBy: {
-      type: String,
-    },
     user: {
       type: ObjectId,
       ref: "User",
@@ -32,6 +29,6 @@ const distributorSchema = new schema(
   { timestamps: true }
 );
 
-const Distributor = mongoose.model("Distributor", distributorSchema);
+const Dist = mongoose.model("Dist", distSchema);
 
-export default Distributor;
+export default Dist;

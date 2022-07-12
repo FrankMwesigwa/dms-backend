@@ -1,9 +1,9 @@
 import express from "express";
-import auth from "../middleware/auth.js";
-import User from "../models/UserModel.js";
-import AgentCart from "../models/AgentCartModel.js";
-import AgentOrder from "../models/AgentOrderModel.js";
-import DistProduct from "../models/DistProductModel.js";
+import auth from "../../middleware/auth.js";
+import User from "../../models/UserModel.js";
+import AgentCart from "../../models/Agent/AgentCartModel.js";
+import AgentOrder from "../../models/Agent/AgentOrderModel.js";
+import DistProduct from "../../models/Dist/DistProductModel.js";
 
 const router = express.Router();
 
@@ -69,9 +69,8 @@ router.get("/:id", auth, async (req, res) => {
 router.get("/history", auth, async (req, res) => {
   let user = await User.findOne({ _id: req.user.id });
   try {
-    let userOrders = await AgentOrder.findOne({ orderdBy: user.id }).populate(
-      "product"
-    );
+    let userOrders = await AgentOrder.findOne({ orderdBy: user.id })
+    console.log("User Orders ===>", userOrders)
     res.status(200).json(userOrders);
   } catch (error) {
     res.json(error.message);

@@ -1,8 +1,8 @@
 import express from "express";
-import auth from "../middleware/auth.js";
-import Cart from "../models/CartModel.js";
-import User from "../models/UserModel.js";
-import Product from "../models/ProductModel.js";
+import auth from "../../middleware/auth.js";
+import DistCart from "../../models/Dist/DistCartModel.js";
+import User from "../../models/UserModel.js";
+import Product from "../../models/ProductModel.js";
 
 const router = express.Router();
 
@@ -11,7 +11,7 @@ router.post("/", auth, async (req, res) => {
   let products = [];
 
   const user = await User.findOne({ _id: req.user.id });
-  let cartExistByThisUser = await Cart.findOne({ orderdBy: user.id });
+  let cartExistByThisUser = await DistCart.findOne({ orderdBy: user.id });
 
   if (cartExistByThisUser) {
     cartExistByThisUser.remove();
@@ -38,13 +38,13 @@ router.post("/", auth, async (req, res) => {
   }
 
   try {
-    let newCart = await new Cart({
+    let newCart = await new DistCart({
       products,
       cartTotal,
       orderdBy: user.id,
     }).save();
 
-    res.json({ ok: true });
+    res.json({ ok: true, newCart });
   } catch (error) {
     res.json(error.message);
   }
@@ -53,10 +53,10 @@ router.post("/", auth, async (req, res) => {
 router.get("/", auth, async (req, res) => {
   const user = await User.findOne({ _id: req.user.id });
   try {
-    let cart = await Cart.findOne({ orderdBy: user.id })
+    let agent = await DistCart.findOne({ orderdBy: user.id })
     .populate("product");
 
-    const { products, cartTotal } = cart;
+    const { products, cartTotal } = agent;
     res.json({ products, cartTotal});
   } catch (error) {
     res.json(error.message);

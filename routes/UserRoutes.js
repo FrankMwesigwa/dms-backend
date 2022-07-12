@@ -3,9 +3,9 @@ import Bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import User from "../models/UserModel.js";
-import Agent from "../models/AgentModel.js";
+import Agent from "../models/Agent/AgentModel.js";
 import Admin from "../models/AdminModel.js";
-import Distributor from "../models/DistributorModel.js";
+import Dist from "../models/Dist/DistModel.js";
 
 const router = express.Router();
 
@@ -30,17 +30,16 @@ router.post("/", async (req, res) => {
 
       const role = savedUser.role.toLowerCase();
       if (role === "distributor") {
-        const distributor = new Distributor({
+        const distributor = new Dist({
           user: savedUser._id,
           name: req.body.name,
           region: req.body.region,
           address: req.body.address,
-          location: req.body.location,
           contact: req.body.contact,
           createdBy: req.body.createdBy,
         });
         await distributor.save();
-        console.log(" Distributor Saved Successfully");
+        console.log(" Dist Saved Successfully");
         console.log("saved distributor====>", distributor);
       } else if (role === "agent") {
         const agent = new Agent({

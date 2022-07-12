@@ -1,6 +1,6 @@
 import express from "express";
 import auth from "../middleware/auth.js";
-import AgentCart from "../models/AgentCartModel.js";
+import AgentCart from "../models/Agent/AgentCartModel.js";
 import User from "../models/UserModel.js";
 
 const router = express.Router();

@@ -1,8 +1,8 @@
 import express from "express";
 import auth from "../middleware/auth.js";
 import User from "../models/UserModel.js";
-import Agent from "../models/AgentModel.js";
-import DistProduct from "../models/DistProductModel.js";
+import Agent from "../models/Agent/AgentModel.js";
+import DistProduct from "../models/Dist/DistProductModel.js";
 
 const router = express.Router();
 
