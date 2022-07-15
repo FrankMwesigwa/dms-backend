@@ -55,4 +55,19 @@ router.get("/", auth, async (req, res) => {
     }
   });
 
+  router.get("/bk", auth, async (req, res) => {
+    try {
+      let sales = await AgentSales.find()
+      .sort("-createdAt")
+      if (!sales) {
+        res.json({
+          message: "There are no sales in the database at this time",
+        });
+      }
+      res.status(200).json(sales);
+    } catch (error) {
+      res.json(error.message);
+    }
+  });
+
 export default router;

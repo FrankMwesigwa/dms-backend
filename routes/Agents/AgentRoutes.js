@@ -33,6 +33,17 @@ router.get("/dist/products", auth, async (req, res) => {
   }
 });
 
+router.get("/admin/products", auth, async (req, res) => {
+  let user = await User.findOne({ _id: req.user.id });
+
+  try {
+    let agent = await Agent.findOne().populate("dist");
+    res.status(200).json({ dist: agent.distributor.user });
+  } catch (error) {
+    res.json(error.message);
+  }
+});
+
 router.get("/dist/product", auth, async (req, res) => {
   let user = await User.findOne({ _id: req.user.id });
   let agent = await Agent.findOne({ user: user.id }).populate("dist");
