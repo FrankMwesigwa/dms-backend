@@ -49,7 +49,7 @@ router.post("/", async (req, res) => {
           address: req.body.address,
           location: req.body.location,
           contact: req.body.contact,
-          distributor: req.body.distributor,
+          dist: req.body.dist,
           createdBy: req.body.createdBy,
         });
         await agent.save();

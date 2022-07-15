@@ -17,7 +17,7 @@ const distProductSchema = new schema(
       },
     ],
     bacthNo: Number,
-    distributor: { type: ObjectId, ref: "User" },
+    dist: { type: ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

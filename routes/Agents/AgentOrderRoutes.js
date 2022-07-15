@@ -45,13 +45,60 @@ router.post("/", auth, async (req, res) => {
 
 router.get("/", auth, async (req, res) => {
   try {
-    let orders = await AgentOrder.find().populate("product");
+    let orders = await AgentOrder.find().sort("-createdAt").populate("product");
     if (!orders) {
       res.json({
         message: "There are no orders in the database at this time",
       });
     }
     res.status(200).json(orders);
+  } catch (error) {
+    res.json(error.message);
+  }
+});
+
+router.get("/products", auth, async (req, res) => {
+  let user = await User.findOne({ _id: req.user.id });
+  try {
+    let orders = await AgentOrder.find({ orderdBy: user.id })
+    .sort("-createdAt")
+    .populate("product");
+    if (!orders) {
+      res.json({
+        message: "There are no orders in the database at this time",
+      });
+    }
+    res.status(200).json(orders);
+  } catch (error) {
+    res.json(error.message);
+  }
+});
+
+router.get("/sales", auth, async (req, res) => {
+  try {
+    let orders = await AgentOrder.find({ orderStatus: "Completed" })
+      .sort("-createdAt")
+      .populate("product");
+    if (!orders) {
+      res.json({
+        message: "There are no orders in the database at this time",
+      });
+    }
+    res.status(200).json(orders);
+  } catch (error) {
+    res.json(error.message);
+
+  }
+});
+
+router.put("/update", auth, async (req, res) => {
+  const { orderId, orderStatus } = req.body;
+  try {
+    let updated = await AgentOrder.findByIdAndUpdate(
+      orderId,
+      { orderStatus },
+      { new: true }
+    );
   } catch (error) {
     res.json(error.message);
   }
@@ -69,8 +116,8 @@ router.get("/:id", auth, async (req, res) => {
 router.get("/history", auth, async (req, res) => {
   let user = await User.findOne({ _id: req.user.id });
   try {
-    let userOrders = await AgentOrder.findOne({ orderdBy: user.id })
-    console.log("User Orders ===>", userOrders)
+    let userOrders = await AgentOrder.findOne({ orderdBy: user.id });
+    console.log("User Orders ===>", userOrders);
     res.status(200).json(userOrders);
   } catch (error) {
     res.json(error.message);

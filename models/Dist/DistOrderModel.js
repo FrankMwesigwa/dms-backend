@@ -21,9 +21,9 @@ const orderSchema = new schema(
       default: "Not Processed",
       enum: [
         "Not Processed",
-        "processing",
+        "Accepted",
+        "Rejected",
         "Dispatched",
-        "Cancelled",
         "Completed",
       ],
     },

@@ -1,14 +1,14 @@
 import express from "express";
-import auth from "../middleware/auth.js";
-import User from "../models/UserModel.js";
-import Agent from "../models/Agent/AgentModel.js";
-import DistProduct from "../models/Dist/DistProductModel.js";
+import auth from "../../middleware/auth.js";
+import User from "../../models/UserModel.js";
+import Agent from "../../models/Agent/AgentModel.js";
+import DistProduct from "../../models/Dist/DistProductModel.js";
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    let agents = await Agent.find().populate("user").populate("distributor");
+    let agents = await Agent.find().populate("user").populate("dist");
 
     if (!agents) {
       res.json({
@@ -25,7 +25,7 @@ router.get("/dist/products", auth, async (req, res) => {
   let user = await User.findOne({ _id: req.user.id });
 
   try {
-    let agent = await Agent.findOne({ user: user.id }).populate("distributor");
+    let agent = await Agent.findOne({ user: user.id }).populate("dist");
     // console.log("agent=====>", agent);
     res.status(200).json({ dist: agent.distributor.user });
   } catch (error) {
@@ -35,17 +35,14 @@ router.get("/dist/products", auth, async (req, res) => {
 
 router.get("/dist/product", auth, async (req, res) => {
   let user = await User.findOne({ _id: req.user.id });
-  let agent = await Agent.findOne({ user: user.id }).populate("distributor");
-
+  let agent = await Agent.findOne({ user: user.id }).populate("dist");
   try {
     let userOrders = await DistProduct.findOne({
-      distributor: agent.distributor.user,
+      dist: agent.dist.user,
     });
-    console.log("=====>", userOrders);
     res
       .status(200)
       .json(userOrders);
-      // .json({ dist: agent.distributor.user, products: userOrders });
   } catch (error) {
     res.json(error.message);
   }

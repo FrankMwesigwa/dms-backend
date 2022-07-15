@@ -21,9 +21,9 @@ const agentSchema = new schema(
     contact: {
       type: String,
     },
-    distributor: {
+    dist: {
       type: ObjectId,
-      ref: "Distributor",
+      ref: "Dist",
     },
     user: {
       type: ObjectId,

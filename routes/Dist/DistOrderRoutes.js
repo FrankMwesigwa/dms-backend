@@ -26,7 +26,7 @@ router.post("/", auth, async (req, res) => {
   let dist = new DistProduct({
     products,
     bacthNo: 1,
-    distributor: user.id,
+    dist: user.id,
   });
   try {
     let newOrder = await order.save();
@@ -57,7 +57,18 @@ router.get("/products", auth, async (req, res) => {
   let user = await User.findOne({ _id: req.user.id });
 
   try {
-    let userOrders = await DistProduct.findOne({ distributor: user.id });
+    let userOrders = await DistProduct.find({ dist: user.id });
+    res.status(200).json(userOrders);
+  } catch (error) {
+    res.json(error.message);
+  }
+});
+
+router.get("/admin/stock", auth, async (req, res) => {
+  let user = await User.findOne({ _id: req.user.id });
+
+  try {
+    let userOrders = await DistProduct.find().sort("-createdAt");
     res.status(200).json(userOrders);
   } catch (error) {
     res.json(error.message);

@@ -12,10 +12,12 @@ import userRoutes from './routes/UserRoutes.js'
 import distRoutes from './routes/Dist/DistRoutes.js'
 import distCartRoutes from './routes/Dist/DistCartRoutes.js'
 import distOrderRoutes from './routes/Dist/DistOrderRoutes.js'
+import distSales from './routes/Dist/DistSalesRoutes.js'
 
-// import agentRoutes from './routes/Agents/AgentRoutes.js'
-// import agentCart from './routes/Agents/AgentCartRoutes.js'
-// import agentOrders from './routes/Agents/AgentOrderRoutes.js'
+import agentRoutes from './routes/Agents/AgentRoutes.js'
+import agentCart from './routes/Agents/AgentCartRoutes.js'
+import agentSales from './routes/Agents/AgentSalesRoutes.js'
+import agentOrders from './routes/Agents/AgentOrderRoutes.js'
 // import uploadRoutes from './routes/UploadRoutes.js'
 
 
@@ -31,11 +33,15 @@ app.use('/api/products', productRoutes);
 app.use('/api/user', userRoutes);
 app.use("/api/distributor", distRoutes);
 app.use('/api/dist/cart', distCartRoutes);
+app.use("/api/dist/sale", distSales);
 app.use("/api/dist/orders", distOrderRoutes);
-// app.use("/api/agents", agentRoutes);
+
+app.use("/api/agents", agentRoutes);
+app.use("/api/agent/cart", agentCart);
+app.use("/api/agent/order", agentOrders);
+app.use("/api/agent/sale", agentSales);
 // app.use("/api/upload", uploadRoutes);
-// app.use("/api/agent/cart", agentCart);
-// app.use("/api/agent/order", agentOrders);
+
 
 
 app.listen(PORT, () => {

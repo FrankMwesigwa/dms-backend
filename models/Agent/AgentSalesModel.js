@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const schema = mongoose.Schema;
 const { ObjectId } = mongoose.Schema;
 
-const agentOrderSchema = new schema(
+const agentSalesSchema = new schema(
   {
     products: [
       {
@@ -11,25 +11,16 @@ const agentOrderSchema = new schema(
         count: Number,
         name: String,
         amount: Number,
+        sale: Number,
+        salePrice: Number
       },
     ],
-    orderStatus: {
-      type: String,
-      default: "Not Processed",
-      enum: [
-        "Not Processed",
-        "Accepted",
-        "Rejected",
-        "Dispatched",
-        "Completed",
-      ],
-    },
     orderTotal: Number,
     orderdBy: { type: ObjectId, ref: "User" },
   },
   { timestamps: true }
 );
 
-const AgentOrder = mongoose.model("AgentOrder", agentOrderSchema);
+const AgentSales = mongoose.model("AgentSales", agentSalesSchema);
 
-export default AgentOrder;
+export default AgentSales;
